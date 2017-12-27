@@ -35,5 +35,19 @@ public class UnitControl : MonoBehaviour {
             physicUnit.moveRight();
         }
 
+
+        if(Input.GetKey(KeyCode.X))
+        {
+            //載入prefab
+            Object obj = Resources.Load<Object>("my_sprite/rocket");
+
+            GameObject newRocket = (GameObject)Instantiate<Object>(obj);
+            newRocket.transform.position = new Vector3(gameObject.transform.position.x,
+                                                       gameObject.transform.position.y+0.5f,
+                                                       gameObject.transform.position.z);
+
+            if (gameObject.transform.localScale.x > 0)
+                newRocket.transform.localScale *= -1;
+        }
     }
 }
