@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class AddLine : MonoBehaviour {
 
-	void Start () {
+   
+
+    void Start () {
         //把線條記錄到hero的 vLine
         //地板的線條
         GameObject goHero = GameObject.Find("hero");
 
-        PhysicUnit hero = goHero.GetComponent<PhysicUnit>();
-
+        PhysicUnit hero = goHero.GetComponent<PhysicUnit>();      
         
         BoxCollider2D b2d = gameObject.GetComponent<BoxCollider2D>();
         Vector2 leftPoint = new Vector2(b2d.bounds.min.x, b2d.bounds.max.y);
