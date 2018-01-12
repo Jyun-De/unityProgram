@@ -4,12 +4,17 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class UnitControl : MonoBehaviour {
+    //BeBug 10 1404
+    //看到 10 4500
 
 
     PhysicUnit physicUnit;
 
-    bool bGoToDoor = false;
-    //主角是否在門的位置
+  
+    string doorName = null;
+    //到了新場景之後把主角放到指定名稱的門，null不須處理的門，可代替bGoToDoor 10 1324
+
+    public static List<GameObject> vDoor = new List<GameObject>();
 
     // Use this for initialization
     void Start () {
@@ -22,24 +27,22 @@ public class UnitControl : MonoBehaviour {
 	void Update ()
     {
 
-        if (bGoToDoor)
+        if (doorName!=null)
         {
             //把主角放到門的位置
-            bGoToDoor = false;
-
-            GameObject goDoor = GameObject.Find("door");
+            GameObject goDoor = GameObject.Find(doorName);
             if (goDoor != null)
             {
-                gameObject.transform.position = goDoor.transform.position;
+                gameObject.transform.position = goDoor.transform.position;               
             }
+            doorName = null;
+
         }
         
 
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
-            //檢查是否與門重疊
-            GameObject goDoor = GameObject.Find("door");
-            if(goDoor!=null)
+            foreach (var goDoor in vDoor)
             {
                 BoxCollider2D doorBox = goDoor.GetComponent<BoxCollider2D>();
                 BoxCollider2D heroBox = gameObject.GetComponent<BoxCollider2D>();
@@ -50,13 +53,18 @@ public class UnitControl : MonoBehaviour {
                     PhysicUnit.vLine.Clear();
                     //清除舊廠景的地板線條
 
+                    doorName = goDoor.name;
                     DoorInfo info = goDoor.GetComponent<DoorInfo>();
                     SceneManager.LoadScene(info.sceneName);
-                    bGoToDoor = true;
+              
+
+                    vDoor.Clear();
+                    //過場景時，將原場景的門清除
+                    break;
 
                 }
-                
-            }
+
+            }        
         }
 
         //跳躍

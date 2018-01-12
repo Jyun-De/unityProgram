@@ -19,27 +19,26 @@ public class PhysicUnit : MonoBehaviour {
 
     //是否站在地板上
     bool bGround=false;
-    
 
-    //void makeLine(string goName)
-    //{
+    BoxCollider2D bodyBox;
 
-    //}
     public void jump()
     {
-        if(bGround==true)
-        ySpeed = 6.5f;
+        //if(bGround==true)
+        ySpeed = 10.5f;
     }
     public void moveRight()
     {
         gameObject.transform.Translate(X_SPEED * Time.deltaTime, 0, 0);
-        gameObject.transform.localScale = new Vector3(3, 3, 1);
+        gameObject.transform.localScale = new Vector3(1, 1, 1);
+             
     }
 
     public void moveLeft()
     {
         gameObject.transform.Translate(-X_SPEED * Time.deltaTime, 0, 0);
-        gameObject.transform.localScale = new Vector3(-3, 3, 1);
+        gameObject.transform.localScale = new Vector3(-1, 1, 1);
+        
     }
 
 
@@ -48,11 +47,46 @@ public class PhysicUnit : MonoBehaviour {
 
     void Start()
 	{
-       
+        bodyBox = GetComponent<BoxCollider2D>();
        
     }
 
-  
+    void fixPossition()
+    {
+        
+
+
+        //修正主角位置，使主角不會超出關卡邊界
+        if (bodyBox.bounds.min.x < 0)
+        {
+            //左邊出界
+            gameObject.transform.position = new Vector3(bodyBox.size.x / 2+0.5f,
+                                                        gameObject.transform.position.y,
+                                                        gameObject.transform.position.z);
+        }
+        if (bodyBox.bounds.max.x <= SceneInfo.sceneSizeW)
+        {
+            //右邊出界
+            gameObject.transform.position = new Vector3(SceneInfo.sceneSizeW-(bodyBox.size.x),
+                                                        gameObject.transform.position.y,
+                                                        gameObject.transform.position.z);
+        }
+        if (bodyBox.bounds.max.y > SceneInfo.sceneSizeH)
+        {
+            //上邊出界
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x,
+                                                        SceneInfo.sceneSizeH-(bodyBox.size.y),
+                                                        gameObject.transform.position.z);
+        }
+        if (bodyBox.bounds.min.y < 0)
+        {
+            //下邊出界
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x,
+                                                        1,
+                                                        gameObject.transform.position.z);
+        }
+
+    }
 
     void Update()
 	{
@@ -94,11 +128,10 @@ public class PhysicUnit : MonoBehaviour {
                 bGround = true;
             }
         }
-       
-       
+
+        fixPossition();
 
 
-      
 
     }
 }

@@ -5,9 +5,12 @@ using UnityEngine;
 public class MainLoader : MonoBehaviour {
     //載入相機及主角
 
+ 
     static GameObject goMainCamera;
     static GameObject goHero;
 
+    public Vector2 initPos;
+    //主角出生位置
 
 	// Use this for initialization
 	void Start () {            
@@ -22,6 +25,10 @@ public class MainLoader : MonoBehaviour {
         prefab = Resources.Load("my_prefab/hero");
         goHero = (GameObject)Instantiate(prefab);
         goHero.name = "hero";
+
+        goHero.transform.position = new Vector3(initPos.x, 
+                                                initPos.y,
+                                                goHero.transform.position.z);
 
         CameraControl cc = goHero.GetComponent<CameraControl>();
         cc.goCamera = goMainCamera;
